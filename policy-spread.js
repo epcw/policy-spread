@@ -13,7 +13,7 @@ const urls = {
 //  edges:
 //  "https://gist.githubusercontent.com/mbostock/7608400/raw/e5974d9bba45bc9ab272d98dd7427567aafd55bc/flights.csv"
     edges:
-    "/policy-spread/edges.csv"
+    "/policy-spread/mask_edges.csv"
 };
 
 const svg  = d3.select("svg");
@@ -83,11 +83,7 @@ function processData(values) {
     link.source = iata.get(link.origin);
     link.target = iata.get(link.destination);
 
-<<<<<<< HEAD
-    link.source.outgoing += link.count;
-=======
-    link.source.outgoing = link.order_count;
->>>>>>> fdf5e95... Fixed same-named counties in different states, scaled circles. TODO: change number of orders to number of weeks under mask mandate
+    link.source.outgoing = link.order_length_days;
     link.target.incoming += link.count;
   });
 
@@ -103,7 +99,8 @@ function processData(values) {
 
   // remove airports without any edges
   old = airports.length;
-  airports = airports.filter(airport => airport.outgoing > 0 && airport.incoming > 0);
+//    airports = airports.filter(airport => airport.outgoing > 0 && airport.incoming > 0);
+//    airports = airports.filter(airport => airport.outgoing > 0);
 //  console.log(" removed: " + (old - airports.length) + " airports without edges");
 
   // sort airports by outgoing degree
@@ -111,7 +108,7 @@ function processData(values) {
 
   // keep only the top airports
   old = airports.length;
-  airports = airports.slice(0, 50);
+  airports = airports.slice(0, 500);
 //  console.log(" removed: " + (old - airports.length) + " airports with low outgoing degree");
 
   // done filtering airports can draw
@@ -173,7 +170,7 @@ function drawAirports(airports) {
     .data(airports, d => d.iata)
     .enter()
     .append("circle")
-    .attr("r",  d => scales.airports(d.outgoing) * 1.5) // pzed this changes the size of the circles.
+    .attr("r",  d => scales.airports(d.outgoing) / 3 ) // pzed this changes the size of the circles.
     .attr("cx", d => d.x) // calculated on load
     .attr("cy", d => d.y) // calculated on load
     .attr("class", "airport")
@@ -228,7 +225,7 @@ function drawPolygons(airports) {
       tooltip.attr("y", airport.y);
 
       // set the tooltip text
-      tooltip.text(airport.city + ", " + airport.state + ": " + airport.outgoing + " mask orders");
+      tooltip.text(airport.city + ", " + airport.state + ": " + airport.outgoing + " days under mask mandate");
 
       // double check if the anchor needs to be changed
       let bbox = tooltip.node().getBBox();
@@ -259,11 +256,8 @@ function drawPolygons(airports) {
       d3.select(this).classed("highlight", !toggle);
     });
 }
-<<<<<<< HEAD
-
-=======
-/* //pzed commenting out until we figure out edges
->>>>>>> fdf5e95... Fixed same-named counties in different states, scaled circles. TODO: change number of orders to number of weeks under mask mandate
+/*
+// pzed commenting out until we figure out edges
 function drawedges(airports, edges) {
   // break each  between airports into multiple segments
   let bundle = generateSegments(airports, edges);
@@ -310,6 +304,7 @@ function drawedges(airports, edges) {
 
   layout.nodes(bundle.nodes).force("link").links(bundle.links);
 }
+*/
 
 // Turns a single edge into several segments that can
 // be used for simple edge bundling.
