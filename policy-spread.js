@@ -99,6 +99,7 @@ function processData(values) {
 
   // remove airports without any edges
   old = airports.length;
+  airports = airports.filter(zeroFilter) //pzed insert
 //    airports = airports.filter(airport => airport.outgoing > 0 && airport.incoming > 0);
 //    airports = airports.filter(airport => airport.outgoing > 0);
 //  console.log(" removed: " + (old - airports.length) + " airports without edges");
@@ -128,6 +129,11 @@ function processData(values) {
 
 //  console.log({airports: airports});
 //  console.log({edges: edges});
+}
+
+//pzed filter for more than 0 outgoing
+function zeroFilter(airports) {
+    return airports.outgoing > 0;
 }
 
 // draws the underlying map
@@ -170,7 +176,7 @@ function drawAirports(airports) {
     .data(airports, d => d.iata)
     .enter()
     .append("circle")
-    .attr("r",  d => scales.airports(d.outgoing) / 3 ) // pzed this changes the size of the circles.
+    .attr("r",  d => scales.airports(d.outgoing) * -1/4 + 12 ) // pzed this changes the size of the circles.
     .attr("cx", d => d.x) // calculated on load
     .attr("cy", d => d.y) // calculated on load
     .attr("class", "airport")

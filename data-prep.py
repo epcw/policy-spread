@@ -38,7 +38,7 @@ garbage_lst = [df_raw,df_order_count_tmp,df_order_length_tmp]
 del garbage_lst
 
 df_edges = pd.read_csv('edges.csv')
-df_edges = df_edges.merge(df_mask_count, how = 'inner', left_on = 'destination', right_on = 'iata').drop_duplicates()
+df_edges = df_edges.merge(df_mask_count, how = 'inner', left_on = 'origin', right_on = 'iata').drop_duplicates()
 
 df_filename = 'mask_mandates_all.csv'
 df_mask_filename = 'mask_mandates.csv'
