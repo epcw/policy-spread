@@ -131,7 +131,7 @@ function processData(values) {
 //  console.log({edges: edges});
 }
 
-//pzed filter for more than 0 outgoing
+//pzed create filter function for more than 0 outgoing
 function zeroFilter(airports) {
     return airports.outgoing > 0;
 }
@@ -262,7 +262,6 @@ function drawPolygons(airports) {
       d3.select(this).classed("highlight", !toggle);
     });
 }
-/*
 // pzed commenting out until we figure out edges
 function drawedges(airports, edges) {
   // break each  between airports into multiple segments
@@ -278,6 +277,16 @@ function drawedges(airports, edges) {
     .data(bundle.paths)
     .enter()
     .append("path")
+/* failed attempt to add arrows
+    .append('marker')
+    .attr('id', 'arrow')
+    .attr('viewBox', [0, 0, markerBoxWidth, markerBoxHeight])
+    .attr('markerWidth', markerBoxWidth)
+    .attr('markerHeight', markerBoxHeight)
+    .attr('orient', 'auto-start-reverse')
+    .attr('d', d3.line()(arrowPoints))
+*/
+    .attr('stroke', 'black')
     .attr("d", line)
     .attr("class", "edge")
     .each(function(d) {
@@ -310,7 +319,6 @@ function drawedges(airports, edges) {
 
   layout.nodes(bundle.nodes).force("link").links(bundle.links);
 }
-*/
 
 // Turns a single edge into several segments that can
 // be used for simple edge bundling.
