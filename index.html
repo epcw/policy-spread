@@ -169,8 +169,13 @@
 
   </header>
 
-
-<!-- must be 960x600 to match topojson us atlas files -->
+<div id="content">
+    <div class="spacer"></div>
+    <h1 id="title" align="center">Mapping the spread of COVID-19 mask mandates in the US</h1>
+    <p align="center">Draft infographic mapping the days under covid mask mandate of major population centers in the US as an initial proxy for the spread of policies from one local government to another (municipalities or counties)</p>
+    <p align="center" class="notes">TODO: Wave labels, sort by order date rather than length of time, Write what's next / context, Data Quality review</p>
+    <div class="spacer"></div>
+    <!-- must be 960x600 to match topojson us atlas files -->
 <svg width="960" height="600">
   <!-- must be in this order for drawing -->
   <g id="basemap"></g>
@@ -179,7 +184,8 @@
   <g id="voronoi"></g>
   <text id="tooltip" style="display: none;"></text>
 </svg>
-
+    <div class="spacer"></div>
+</div>
 <script type="text/javascript" src="/policy-spread/policy-spread.js"></script>
 <script type="text/javascript" src="/policy-spread/color-cities.js"></script>
 
