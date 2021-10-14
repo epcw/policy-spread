@@ -26,6 +26,21 @@ body {
   opacity: 0.6;
   stroke: #252525;
 }
+.airport.red {
+  fill: red!important;
+}
+.airport.orange {
+  fill: orange!important;
+}
+.airport.yellow {
+  fill: yellow!important;
+}
+.airport.lightgreen {
+  fill: yellowgreen!important;
+}
+.airport.darkgreen {
+  fill: green!important;
+}
 
 .edge {
   fill: none;

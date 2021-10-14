@@ -29,7 +29,7 @@ const projection = d3.geoAlbers().scale(1280).translate([480, 300]);
 const scales = {
   // used to scale airport bubbles
   airports: d3.scaleSqrt()
-    .range([4, 18]),
+    .range([4, 28]),
 
   // used to scale number of segments per line
   segments: d3.scaleLinear()
