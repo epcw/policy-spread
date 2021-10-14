@@ -12,7 +12,8 @@ Patrick W. Zimmerman
 d3.v5\
 Python\
 CSS\
-HTML
+HTML\
+jQuery 3.5.1
 
 #### Python Package requirements (as well as all their dependencies)
 pandas
