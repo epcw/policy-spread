@@ -55,11 +55,11 @@ body {
   stroke: none;
   stroke-width: 1px;
 }
-@media only screen and (min-width:768px) {
+/* @media only screen and (min-width:768px) {
 .highlight {
   stroke: red !important;
 }
-}
+}*/
 .highlight {
   opacity: 1 !important;
   stroke-width: 2px !important;

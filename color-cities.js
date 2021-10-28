@@ -17,7 +17,7 @@ jQuery(window).on('load',function() {
                 $(this).addClass('darkgreen');
             }
         });
-    }, 2);
+    }, 200);
 });
 
 /*
