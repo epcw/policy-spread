@@ -1,7 +1,5 @@
-import re
 import pandas as pd
 import csv
-from datetime import datetime
 
 df_raw = pd.read_csv('data/U.S._State_and_Territorial_Public_Mask_Mandates_From_April_10__2020_through_August_15__2021_by_County_by_Day.csv', dtype={"FIPS_State": str,"FIPS_County": str}, parse_dates=['date'])
 df_raw['FIPS_State'] = df_raw['FIPS_State'].str.zfill(2)
