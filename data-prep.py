@@ -1,8 +1,9 @@
 import re
 import pandas as pd
 import csv
+from datetime import datetime
 
-df_raw = pd.read_csv('data/U.S._State_and_Territorial_Public_Mask_Mandates_From_April_10__2020_through_August_15__2021_by_County_by_Day.csv', dtype={"FIPS_State": str,"FIPS_County": str})
+df_raw = pd.read_csv('data/U.S._State_and_Territorial_Public_Mask_Mandates_From_April_10__2020_through_August_15__2021_by_County_by_Day.csv', dtype={"FIPS_State": str,"FIPS_County": str}, parse_dates=['date'])
 df_raw['FIPS_State'] = df_raw['FIPS_State'].str.zfill(2)
 df_raw['FIPS_County'] = df_raw['FIPS_County'].str.zfill(3)
 df_raw['FIPS'] = df_raw['FIPS_State'] + df_raw['FIPS_County']
@@ -22,7 +23,6 @@ df_mask = df_raw[(df_raw['order_code'] == 1)]
 df_mask = df_mask[df_mask.groupby('Citation').date.transform('max') == df_mask['date']]
 df_nomask = df_raw[(df_raw['order_code'] == 2)]
 df_nomask = df_nomask[df_nomask.groupby('Citation').date.transform('max') == df_nomask['date']]
-#problem is here
 df_order_count_tmp = df_raw[(df_raw['order_code'] == 1)]
 df_order_count_tmp = df_order_count_tmp[['FIPS','Citation']].drop_duplicates()
 df_order_count_tmp = df_order_count_tmp.groupby(['FIPS']).count().reset_index()
@@ -30,11 +30,21 @@ df_order_count_tmp = df_order_count_tmp.rename(columns = {'Citation':'order_coun
 df_mask = df_mask.merge(df_order_count_tmp, how = 'inner', left_on = 'FIPS', right_on = 'FIPS').drop_duplicates()
 df_order_length_tmp = df_raw[(df_raw['order_code'] == 1)]
 df_order_length_tmp = df_order_length_tmp[['FIPS','date']].drop_duplicates()
-df_order_length_tmp = df_order_length_tmp.groupby(['FIPS']).count().reset_index()
-df_order_length_tmp = df_order_length_tmp.rename(columns = {'date':'order_length_days'})
-df_mask = df_mask.merge(df_order_length_tmp, how = 'inner', left_on = 'FIPS', right_on = 'FIPS').drop_duplicates()
-df_mask_count = df_mask[['iata','order_count','order_length_days']].drop_duplicates()
-garbage_lst = [df_raw,df_order_count_tmp,df_order_length_tmp]
+df_order_length_tmp_max = df_order_length_tmp[df_order_length_tmp.groupby('FIPS').date.transform('max') == df_order_length_tmp['date']]
+df_order_length_tmp_min = df_order_length_tmp[df_order_length_tmp.groupby('FIPS').date.transform('min') == df_order_length_tmp['date']]
+df_order_length_tmp_min = df_order_length_tmp_min.rename(columns = {'date':'date_start'})
+df_order_length_tmp_max = df_order_length_tmp_max.rename(columns = {'date':'date_end'})
+df_order_length_tmp = df_order_length_tmp.merge(df_order_length_tmp_min, how = 'inner', left_on = 'FIPS', right_on = 'FIPS').drop_duplicates()
+df_order_length_tmp = df_order_length_tmp.merge(df_order_length_tmp_max, how = 'inner', left_on = 'FIPS', right_on = 'FIPS').drop_duplicates()
+df_order_length_tmp['order_length_days'] = df_order_length_tmp['date_end'] - df_order_length_tmp['date_start']
+#df_order_length_tmp = df_order_length_tmp.groupby(['FIPS']).count().reset_index() #old method of just counting rows
+#df_order_length_tmp = df_order_length_tmp.rename(columns = {'date':'order_length_days'})
+df_mask_count = df_mask[['iata','FIPS','order_count']].drop_duplicates() #this also serves to group by FIPS
+df_mask_count = df_mask_count.merge(df_order_length_tmp, how = 'inner', left_on = 'FIPS', right_on = 'FIPS').drop_duplicates()
+df_mask_count = df_mask_count[['iata','order_count','order_length_days','date_start','date_end']].drop_duplicates()
+df_mask_count['order_length_days'] = df_mask_count['order_length_days'].astype(str) #convert the number of days from a timedelta obj to string
+df_mask_count['order_length_days'] = df_mask_count['order_length_days'].map(lambda x: x.rstrip(' days')) #strip the labeling so js just has an integer to work with
+garbage_lst = [df_raw,df_order_count_tmp,df_order_length_tmp,df_order_length_tmp_min,df_order_length_tmp_max]
 del garbage_lst
 
 df_edges = pd.read_csv('edges.csv')

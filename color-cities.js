@@ -1,19 +1,19 @@
 jQuery(window).on('load',function() {
     setTimeout(function() {
         $("#airports circle").each(function() {
-            if ($(this).attr('r') < 10) {
+            if ($(this).attr('r') < 12) {
                 $(this).addClass('red');
             }
-            if (($(this).attr('r') >= 10 ) && ($(this).attr('r') < 15 )) {
+            if (($(this).attr('r') >= 12 ) && ($(this).attr('r') < 18.5 )) {
                 $(this).addClass('orange');
             }
-            if (($(this).attr('r') >= 15 ) && ($(this).attr('r') < 20 )) {
+            if (($(this).attr('r') >= 18.5 ) && ($(this).attr('r') < 24 )) {
                 $(this).addClass('yellow');
             }
-            if (($(this).attr('r') >= 20 ) && ($(this).attr('r') < 25 )) {
+            if (($(this).attr('r') >= 24 ) && ($(this).attr('r') < 27 )) {
                 $(this).addClass('lightgreen');
             }
-            if ($(this).attr('r') > 25) {
+            if ($(this).attr('r') >= 27) {
                 $(this).addClass('darkgreen');
             }
         });
